@@ -8,34 +8,62 @@ public class SensorDataStorage
     private readonly Queue<Anomaly> anomalies = [];
     private int sequenceNumber = 0;
     private readonly int keepMemoryCount = 20;
+    private readonly Lock _lock = new();
 
     public void AddReading(SensorReading reading)
     {
-        reading.Id = Guid.NewGuid();
-        reading.SequenceNumber = sequenceNumber++;
-        sensorReadings.Enqueue(reading);
-        if (sensorReadings.Count > keepMemoryCount)
-            sensorReadings.Dequeue();
+        lock (_lock)
+        {
+            reading.Id = Guid.NewGuid();
+            reading.SequenceNumber = sequenceNumber++;
+            sensorReadings.Enqueue(reading);
+            if (sensorReadings.Count > keepMemoryCount)
+                sensorReadings.Dequeue();
+        }
     }
 
-    public Queue<SensorReading> GetSensorReadings() => sensorReadings;
+    public Queue<SensorReading> GetSensorReadings()
+    {
+        lock (_lock)
+        {
+            return sensorReadings;
+        }
+    }
 
-    public SensorReading? GetLatestReading() => sensorReadings.LastOrDefault();
+    public SensorReading? GetLatestReading()
+    {
+        lock (_lock)
+        {
+            return sensorReadings.LastOrDefault();
+        }
+    }
 
     public void AddAnomaly(Anomaly anomaly)
     {
-        anomalies.Enqueue(anomaly);
-        if (anomalies.Count > keepMemoryCount)
-            anomalies.Dequeue();
+        lock (_lock)
+        {
+            anomalies.Enqueue(anomaly);
+            if (anomalies.Count > keepMemoryCount)
+                anomalies.Dequeue();
+        }
     }
 
     public void AddAnomalies(Queue<Anomaly> anomalies)
     {
-        foreach (var anomaly in anomalies)
+        lock (_lock)
         {
-            AddAnomaly(anomaly);
+            foreach (var anomaly in anomalies)
+            {
+                AddAnomaly(anomaly);
+            }
         }
     }
 
-    public Queue<Anomaly> GetAnomalies() => anomalies;
+    public Queue<Anomaly> GetAnomalies()
+    {
+        lock (_lock)
+        {
+            return anomalies;
+        }
+    }
 }
