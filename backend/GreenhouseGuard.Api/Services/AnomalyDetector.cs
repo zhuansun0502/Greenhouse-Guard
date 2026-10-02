@@ -1,33 +1,54 @@
+using GreenhouseGuard.Api.DataStore;
 using GreenhouseGuard.Api.Models;
 
 namespace GreenhouseGuard.Api.Services;
 
-public class AnomalyDetector {
-    private const int KeepMemoryCount = 20;
+public class AnomalyDetector(SensorDataStorage dataStore)
+{
     private const double Threshold = 2.5;
     private const int MinimumReadingsCount = 10;
 
-    private readonly Queue<double> lastTwentyValues = new();
-
-    public bool IsAnomaly(double reading, out double zScore) {
+    public bool IsAnomaly(double latestReadingData, List<double> historyReadings, out double zScore)
+    {
         zScore = 0;
+        double mean = historyReadings.Average();
+        double deviation = Math.Sqrt(historyReadings.Sum(value => Math.Pow(value - mean, 2)) / historyReadings.Count);
+        if (deviation != 0)
+            zScore = (latestReadingData - mean) / deviation;
+        return Math.Abs(zScore) > Threshold;
+    }
 
-        if (lastTwentyValues.Count < MinimumReadingsCount) {
-            lastTwentyValues.Enqueue(reading);
-            return false;
+    public Anomaly[] CheckForAnomalies(SensorReading latestReading)
+    {
+        List<Anomaly> anomalies = [];
+        List<SensorReading> historyReadings = [.. dataStore.GetSensorReadings()];
+
+        if (historyReadings.Count < MinimumReadingsCount)
+            return [];
+
+        (string sensorType, decimal latestReadingValueBySensor, Func<SensorReading, decimal> getValue)[] readingsMap =
+        [
+            ("temperature", latestReading.Temperature, r => r.Temperature),
+            ("humidity",    latestReading.Humidity,    r => r.Humidity),
+            ("co2",         latestReading.Co2Ppm,      r => r.Co2Ppm)    ];
+
+        foreach (var (sensorType, latestReadingValueBySensor, getValue) in readingsMap)
+        {
+            List<double> historyReadingsBySensor = [.. historyReadings.Select(r => (double)getValue(r))];
+            if (IsAnomaly((double)latestReadingValueBySensor, historyReadingsBySensor, out double zScore))
+            {
+                anomalies.Add(new Anomaly
+                {
+                    Id = Guid.NewGuid(),
+                    DetectedAt = latestReading.Timestamp,
+                    Value = latestReadingValueBySensor,
+                    ZScore = (decimal)zScore,
+                    SensorType = sensorType,
+                    Reason = $"Anomaly detected in {sensorType} sensor with z-score {zScore}"
+                });
+            }
         }
 
-        double mean = lastTwentyValues.Average();
-        double sumSquares = lastTwentyValues.Sum(value => Math.Pow(value - mean, 2));
-        double deviation = Math.Sqrt(sumSquares / lastTwentyValues.Count);
-
-        if (deviation != 0)
-            zScore = (reading - mean) / deviation;
-
-        if (lastTwentyValues.Count >= KeepMemoryCount)
-            lastTwentyValues.Dequeue();
-        lastTwentyValues.Enqueue(reading);
-
-        return Math.Abs(zScore) > Threshold;
+        return [.. anomalies];
     }
 }
