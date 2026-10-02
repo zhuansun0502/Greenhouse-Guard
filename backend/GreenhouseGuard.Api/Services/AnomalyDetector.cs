@@ -18,9 +18,9 @@ public class AnomalyDetector(SensorDataStorage dataStore)
         return Math.Abs(zScore) > Threshold;
     }
 
-    public Anomaly[] CheckForAnomalies(SensorReading latestReading)
+    public Queue<Anomaly> CheckForAnomalies(SensorReading latestReading)
     {
-        List<Anomaly> anomalies = [];
+        Queue<Anomaly> anomalies = [];
         List<SensorReading> historyReadings = [.. dataStore.GetSensorReadings()];
 
         if (historyReadings.Count < MinimumReadingsCount)
@@ -37,7 +37,7 @@ public class AnomalyDetector(SensorDataStorage dataStore)
             List<double> historyReadingsBySensor = [.. historyReadings.Select(r => (double)getValue(r))];
             if (IsAnomaly((double)latestReadingValueBySensor, historyReadingsBySensor, out double zScore))
             {
-                anomalies.Add(new Anomaly
+                anomalies.Enqueue(new Anomaly
                 {
                     Id = Guid.NewGuid(),
                     DetectedAt = latestReading.Timestamp,
@@ -49,6 +49,6 @@ public class AnomalyDetector(SensorDataStorage dataStore)
             }
         }
 
-        return [.. anomalies];
+        return anomalies;
     }
 }

@@ -5,28 +5,37 @@ namespace GreenhouseGuard.Api.DataStore;
 public class SensorDataStorage
 {
     private readonly Queue<SensorReading> sensorReadings = [];
-    private readonly List<Anomaly> anomalies = [];
+    private readonly Queue<Anomaly> anomalies = [];
     private int sequenceNumber = 0;
+    private readonly int keepMemoryCount = 20;
 
     public void AddReading(SensorReading reading)
     {
         reading.Id = Guid.NewGuid();
         reading.SequenceNumber = sequenceNumber++;
         sensorReadings.Enqueue(reading);
+        if (sensorReadings.Count > keepMemoryCount)
+            sensorReadings.Dequeue();
     }
 
     public Queue<SensorReading> GetSensorReadings() => sensorReadings;
 
-    // public void AddAnomaly(Anomaly anomaly)
-    // {
-    //     anomaly.Id = Guid.NewGuid();
-    //     anomalies.Add(anomaly);
-    // }
+    public SensorReading? GetLatestReading() => sensorReadings.LastOrDefault();
 
-    public void AddAnomalies(List<Anomaly> anomalies)
+    public void AddAnomaly(Anomaly anomaly)
     {
-        this.anomalies.AddRange(anomalies);
+        anomalies.Enqueue(anomaly);
+        if (anomalies.Count > keepMemoryCount)
+            anomalies.Dequeue();
     }
 
-    public List<Anomaly> GetAnomalies() => anomalies;
+    public void AddAnomalies(Queue<Anomaly> anomalies)
+    {
+        foreach (var anomaly in anomalies)
+        {
+            AddAnomaly(anomaly);
+        }
+    }
+
+    public Queue<Anomaly> GetAnomalies() => anomalies;
 }
