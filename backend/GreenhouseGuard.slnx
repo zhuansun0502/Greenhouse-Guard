@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="GreenhouseGuard.Api/GreenhouseGuard.Api.csproj" />
+  <Project Path="GreenhouseGuard.Tests/GreenhouseGuard.Tests.csproj" />
+</Solution>
