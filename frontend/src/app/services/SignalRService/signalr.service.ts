@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { Anomaly, ConnectionStatus, SensorReading } from '../../models';
 import { BehaviorSubject, Subject } from 'rxjs';
 import * as signalR from '@microsoft/signalr';
@@ -6,7 +6,7 @@ import * as signalR from '@microsoft/signalr';
 const CONNECTION_RETRY_INTERVAL = 3000;
 
 @Injectable({ providedIn: 'root' })
-export class SignalRService {
+export class SignalRService implements OnDestroy {
     public sensorReading$ = new Subject<SensorReading>();
     public anomaly$ = new Subject<Anomaly>();
     public connectionStatus$ = new BehaviorSubject<ConnectionStatus>('OFFLINE');
@@ -67,5 +67,9 @@ export class SignalRService {
 
     getConnectionStatus() {
         return this.connectionStatus$;
+    }
+
+    ngOnDestroy() {
+        this.disconnect();
     }
 }
