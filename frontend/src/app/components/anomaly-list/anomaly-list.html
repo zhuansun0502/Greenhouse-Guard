@@ -1,0 +1,19 @@
+<div>
+    <h2>Last 10 anomalies</h2>
+    @if (anomalies().length > 0) {
+    <ul>
+        @for (anomaly of anomalies(); track anomaly.id) {
+        <li>
+            <span>{{ anomaly.detectedAt | date: 'mediumTime' }}</span>
+            <strong>{{ anomaly.sensorType }}</strong>
+            <span>{{ anomaly.value | number: '1.0-1' }}</span>
+            <span>z-score = {{ anomaly.zScore | number: '1.0-2' }}</span>
+            <span>{{ anomaly.reason }}</span>
+        </li>
+        }
+    </ul>
+    }
+    @else {
+        <span>N/A</span>
+    }
+</div>

@@ -1,0 +1,14 @@
+<header class="header">
+  <h1>Greenhouse Monitor</h1>
+
+  <div class="meta">
+    <span class="last-update">
+      Last updated: {{ latestReading()?.timestamp ?? 'N/A' }}
+    </span>
+
+    <span class="badge">
+      <span class="dot"></span>
+        Connection Status: {{ connectionStatus() ?? 'N/A' }}
+    </span>
+  </div>
+</header>
