@@ -30,7 +30,8 @@ public class AnomalyDetector(SensorDataStorage dataStore)
         [
             ("temperature", latestReading.Temperature, r => r.Temperature),
             ("humidity",    latestReading.Humidity,    r => r.Humidity),
-            ("co2",         latestReading.Co2Ppm,      r => r.Co2Ppm)    ];
+            ("co2",         latestReading.Co2Ppm,      r => r.Co2Ppm)    
+        ];
 
         foreach (var (sensorType, latestReadingValueBySensor, getValue) in readingsMap)
         {

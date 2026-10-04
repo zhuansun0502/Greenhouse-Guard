@@ -9,7 +9,7 @@ const CONNECTION_RETRY_INTERVAL = 3000;
 export class SignalRService {
     public sensorReading$ = new Subject<SensorReading>();
     public anomaly$ = new Subject<Anomaly>();
-    public connectionStatus$ = new BehaviorSubject<ConnectionStatus>('disconnected');
+    public connectionStatus$ = new BehaviorSubject<ConnectionStatus>('OFFLINE');
 
     private readonly hub = new signalR.HubConnectionBuilder()
         .withUrl('http://localhost:5086/live')
@@ -25,18 +25,31 @@ export class SignalRService {
         );
 
         this.hub.onreconnecting(() => this.connectionStatus$.next('reconnecting'));
-        this.hub.onreconnected(() => this.connectionStatus$.next('connected'));
-        this.hub.onclose(() => this.connectionStatus$.next('disconnected'));
+        this.hub.onreconnected(() => this.connectionStatus$.next('LIVE'));
+        this.hub.onclose(() => this.connectionStatus$.next('OFFLINE'));
+
+        window.addEventListener('offline', () => this.connectionStatus$.next('OFFLINE'));
+        window.addEventListener('online', this.handleOnline);
     }
 
+    private readonly handleOnline = () => {
+        if (this.hub.state !== signalR.HubConnectionState.Connected)
+            this.connect();
+        else
+            this.connectionStatus$.next('connecting');
+    };
+
     async connect() {
+        if (this.hub.state === signalR.HubConnectionState.Connected)
+            return;
+
         this.connectionStatus$.next('connecting');
 
         try {
             await this.hub.start();
-            this.connectionStatus$.next('connected');
+            this.connectionStatus$.next('LIVE');
         } catch (error) {
-            this.connectionStatus$.next('disconnected');
+            this.connectionStatus$.next('OFFLINE');
             console.error('Error connecting to SignalR:', (error as Error).message, '- retrying in 3 seconds');
             setTimeout(() => this.connect(), CONNECTION_RETRY_INTERVAL);
         }
@@ -46,7 +59,7 @@ export class SignalRService {
         try {
             await this.hub.stop();
             clearTimeout(this.retryTimer);
-            this.connectionStatus$.next('disconnected');
+            this.connectionStatus$.next('OFFLINE');
         } catch (error) {
             console.error('Error disconnecting from SignalR:', (error as Error).message);
         }

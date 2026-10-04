@@ -4,7 +4,7 @@
     <ul>
         @for (anomaly of anomalies(); track anomaly.id) {
         <li>
-            <span>{{ anomaly.detectedAt | date: 'mediumTime' }}</span>
+            <span>{{ anomaly.detectedAt | date: 'medium' }}</span>
             <strong>{{ anomaly.sensorType }}</strong>
             <span>{{ anomaly.value | number: '1.0-1' }}</span>
             <span>z-score = {{ anomaly.zScore | number: '1.0-2' }}</span>

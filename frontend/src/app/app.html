@@ -1,8 +1,14 @@
-<app-header />
-<div>
-    <app-sensor-card title="Temperature: " [value]="latestReading()?.temperature ?? 'N/A'" />
-    <app-sensor-card title="Humidity: " [value]="latestReading()?.humidity ?? 'N/A'" />
-    <app-sensor-card title="CO2Ppm: " [value]="latestReading()?.co2Ppm ?? 'N/A'" />
-
-    <app-anomaly-list [anomalies] = "anomalyList()"/>
+<div class="container">
+    <app-header class="header" />
+    <div class="content">
+        <div class="cards">
+            <app-sensor-card title="Temperature (°C): " [timestamp]="latestReading()?.timestamp"
+                [value]="latestReading()?.temperature" />
+            <app-sensor-card title="Humidity (%): " [timestamp]="latestReading()?.timestamp"
+                [value]="latestReading()?.humidity" />
+            <app-sensor-card title="CO2Ppm (ppm): " [timestamp]="latestReading()?.timestamp"
+                [value]="latestReading()?.co2Ppm" />
+        </div>
+        <app-anomaly-list [anomalies]="anomalyList() ?? []" />
+    </div>
 </div>

@@ -1,0 +1,47 @@
+:host {
+    display: block;
+    width: 100%;
+    max-width: 960px;
+}
+
+.header {
+    text-align: center;
+}
+
+h1 {
+    margin: 0 0 0.5rem;
+}
+
+.meta {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #999;
+
+    &.LIVE {
+        background: #22c55e;
+    }
+
+    &.connecting,
+    &.reconnecting {
+        background: #eab308;
+    }
+
+    &.OFFLINE {
+        background: #ef4444;
+    }
+}

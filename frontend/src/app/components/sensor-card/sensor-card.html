@@ -2,6 +2,8 @@
     <span>{{ title() }}</span>
 
     @if (value() != null) {
+        <span>Timestamp: {{ timestamp() | date: 'medium'}}</span>
+        <br />
         <span>{{ value() }}</span>
     }
     @else {

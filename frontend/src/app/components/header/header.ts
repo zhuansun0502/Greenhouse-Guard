@@ -1,11 +1,11 @@
 import { Component, inject, signal } from '@angular/core';
-import { ConnectionStatus } from '../../models';
 import { SignalRService } from '../../services/SignalRService/signalr.service';
 import { SensorDataService } from '../../services/SensorDataService/sensor-data.service';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { DatePipe } from '@angular/common';
 
 @Component({
-  imports: [],
+  imports: [DatePipe],
   selector: 'app-header',
   styleUrl: './header.scss',
   templateUrl: './header.html',

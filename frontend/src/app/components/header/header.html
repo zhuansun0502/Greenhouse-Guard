@@ -3,12 +3,12 @@
 
   <div class="meta">
     <span class="last-update">
-      Last updated: {{ latestReading()?.timestamp ?? 'N/A' }}
+      Last updated: {{ (latestReading()?.timestamp | date: 'medium') ?? 'N/A' }}
     </span>
 
     <span class="badge">
-      <span class="dot"></span>
-        Connection Status: {{ connectionStatus() ?? 'N/A' }}
+      <span [class]="'dot ' + connectionStatus()"></span>
+      Connection Status: {{ connectionStatus() ?? 'N/A' }}
     </span>
   </div>
 </header>

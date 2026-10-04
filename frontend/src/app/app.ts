@@ -5,9 +5,10 @@ import { SignalRService } from './services/SignalRService/signalr.service';
 import { SensorCard } from './components/sensor-card/sensor-card';
 import { AnomalyList } from './components/anomaly-list/anomaly-list';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { DatePipe } from '@angular/common';
 
 @Component({
-  imports: [Header, SensorCard, AnomalyList],
+  imports: [Header, SensorCard, AnomalyList, DatePipe],
   selector: 'app-root',
   styleUrl: './app.scss',
   templateUrl: './app.html',
