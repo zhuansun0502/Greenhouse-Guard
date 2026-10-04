@@ -43,9 +43,9 @@ public class AnomalyDetector(SensorDataStorage dataStore)
                     Id = Guid.NewGuid(),
                     DetectedAt = latestReading.Timestamp,
                     Value = latestReadingValueBySensor,
-                    ZScore = (decimal)zScore,
+                    ZScore = Math.Round((decimal)zScore, 2),
                     SensorType = sensorType,
-                    Reason = $"Anomaly detected in {sensorType} sensor with z-score {zScore}"
+                    Reason = $"Anomaly detected in {sensorType} sensor with z-score {Math.Round(zScore, 2)}"
                 });
             }
         }
