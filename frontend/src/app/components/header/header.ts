@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { SignalRService } from '../../services/SignalRService/signalr.service';
 import { SensorDataService } from '../../services/SensorDataService/sensor-data.service';
 import { toSignal } from '@angular/core/rxjs-interop';

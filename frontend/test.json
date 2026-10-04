@@ -1,0 +1,25 @@
+[
+    { "timestamp": "2026-10-04T10:00:00Z", "temperature": 24.1, "humidity": 68.0, "co2": 650 },
+    { "timestamp": "2026-10-04T10:01:00Z", "temperature": 24.3, "humidity": 67.5, "co2": 660 },
+    { "timestamp": "2026-10-04T10:02:00Z", "temperature": 24.6, "humidity": 66.8, "co2": 672 },
+    { "timestamp": "2026-10-04T10:03:00Z", "temperature": 24.8, "humidity": 66.0, "co2": 680 },
+    { "timestamp": "2026-10-04T10:04:00Z", "temperature": 25.0, "humidity": 65.4, "co2": 690 },
+  
+    { "timestamp": "2026-10-04T10:05:00Z", "temperature": 41.8, "humidity": 52.0, "co2": 700 },
+    { "timestamp": "2026-10-04T10:06:00Z", "temperature": -3.2, "humidity": 90.0, "co2": 705 },
+    { "timestamp": "2026-10-04T10:07:00Z", "temperature": 24.9, "humidity": 12.0, "co2": 710 },
+    { "timestamp": "2026-10-04T10:08:00Z", "temperature": 25.1, "humidity": 112.4, "co2": 715 },
+    { "timestamp": "2026-10-04T10:09:00Z", "temperature": 25.0, "humidity": 64.0, "co2": 5200 },
+    { "timestamp": "2026-10-04T10:10:00Z", "temperature": 25.2, "humidity": 63.8, "co2": 0 },
+    { "timestamp": "2026-10-04T10:11:00Z", "temperature": null, "humidity": 63.5, "co2": 720 },
+    { "timestamp": "2026-10-04T10:12:00Z", "temperature": 25.3, "humidity": null, "co2": null },
+    { "timestamp": "2026-10-04T10:13:00Z", "temperature": 88.0, "humidity": 63.0, "co2": 725 },
+  
+    { "timestamp": "2026-10-04T10:14:00Z", "temperature": 25.0, "humidity": 63.0, "co2": 725 },
+    { "timestamp": "2026-10-04T10:15:00Z", "temperature": 25.0, "humidity": 63.0, "co2": 725 },
+    { "timestamp": "2026-10-04T10:16:00Z", "temperature": 25.0, "humidity": 63.0, "co2": 725 },
+  
+    { "timestamp": "2026-10-04T09:30:00Z", "temperature": 24.0, "humidity": 65.0, "co2": 650 },
+    { "timestamp": "2026-10-04T10:16:00Z", "temperature": 25.0, "humidity": 63.0, "co2": 725 },
+    { "timestamp": "not-a-date",           "temperature": 24.5, "humidity": 64.0, "co2": 700 }
+  ]
